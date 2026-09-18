@@ -1,0 +1,47 @@
+:root {
+  font-family:
+    'Bahnschrift', 'Segoe UI Variable Text', 'Segoe UI', 'Aptos', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #e5eef9;
+  background:
+    radial-gradient(circle at top, rgba(37, 99, 235, 0.24), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.18), transparent 26%),
+    #030712;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
