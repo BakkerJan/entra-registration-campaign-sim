@@ -103,8 +103,8 @@ function App() {
           <p className="eyebrow">Microsoft Entra campaign simulator</p>
           <h1>To nudge, or not to nudge?</h1>
           <p className="lede">
-            Settings-only simulator for the registration campaign consequences you care about.
-            It keeps the yes/no output while trimming the inputs you do not need right now.
+            Quick what-if tool for Microsoft Entra registration campaigns: tune policy settings
+            and instantly see whether a user is nudged now.
           </p>
         </div>
 
