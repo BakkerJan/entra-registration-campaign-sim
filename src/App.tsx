@@ -148,11 +148,13 @@ function App() {
           </div>
 
           {campaignDisabled ? (
-            <div className="info-box">
-              <strong>Campaign disabled</strong>
-              <p>
-                The registration campaign is turned off, so every other policy and environmental setting is ignored.
-              </p>
+            <div className="checklist-card disabled-state-card">
+              <div className="card-heading">
+                <h3>Campaign disabled</h3>
+              </div>
+              <div className="info-box">
+                <p>The registration campaign is turned off, so users are not nudged.</p>
+              </div>
             </div>
           ) : (
             <>

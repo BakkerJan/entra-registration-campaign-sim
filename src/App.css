@@ -123,7 +123,8 @@
 
 .panel-controls > :nth-child(1),
 .panel-controls > :nth-child(2),
-.panel-controls > :nth-child(5) {
+.panel-controls > :nth-child(5),
+.panel-controls > .disabled-state-card {
   grid-column: 1 / -1;
 }
 

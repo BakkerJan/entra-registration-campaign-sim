@@ -266,7 +266,7 @@ export function evaluateScenario(scenario: Scenario): Evaluation {
   trace.push(`Targeted method: ${scenario.targetMethod}`)
 
   if (scenario.campaignState === 'disabled') {
-    blockers.push('The registration campaign is disabled.')
+    blockers.push('The registration campaign is turned off, so users are not nudged.')
   } else {
     if (scenario.signInMfaMethod === 'temporaryAccessPass') {
       blockers.push('Temporary Access Pass sign-ins do not qualify for the nudge.')
