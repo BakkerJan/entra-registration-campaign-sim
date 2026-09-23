@@ -116,21 +116,14 @@
 }
 
 .panel-controls {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
-.panel-controls > :nth-child(1),
-.panel-controls > :nth-child(2),
-.panel-controls > :nth-child(5),
-.panel-controls > .disabled-state-grid {
-  grid-column: 1 / -1;
-}
-
-.panel-controls > :nth-child(3),
-.panel-controls > :nth-child(4) {
-  margin-top: 0;
+.panel-controls > :first-child,
+.panel-controls > .standalone-disabled-state {
+  width: 100%;
 }
 
 .standalone-disabled-state {
@@ -203,6 +196,10 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   align-items: start;
+}
+
+.panel-controls .form-grid {
+  grid-template-columns: 1fr;
 }
 
 .form-grid label,
