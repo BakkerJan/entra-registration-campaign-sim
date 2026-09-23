@@ -40,7 +40,6 @@ function App() {
   const [scenario, setScenario] = useState<Scenario>(defaultScenario)
 
   const evaluation = useMemo(() => evaluateScenario(scenario), [scenario])
-  const passkeyEligibilityActive = scenario.campaignState === 'managed' && scenario.targetMethod === 'passkey'
 
   function updateScenario<K extends keyof Scenario>(key: K, value: Scenario[K]) {
     setScenario((current) => {
