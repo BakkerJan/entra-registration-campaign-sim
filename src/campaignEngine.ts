@@ -26,6 +26,7 @@ export type SignInMfaMethod =
   | 'none'
   | 'sms'
   | 'voiceCall'
+  | 'certificateBasedAuthentication'
   | 'microsoftAuthenticatorPush'
   | 'microsoftAuthenticatorCode'
   | 'passkeyOrFido2SecurityKey'
@@ -100,6 +101,7 @@ export const signInMfaOptions = [
   { value: 'none', label: 'No MFA' },
   { value: 'sms', label: 'SMS' },
   { value: 'voiceCall', label: 'Voice call' },
+  { value: 'certificateBasedAuthentication', label: 'Certificate Based Authentication (CBA)' },
   { value: 'microsoftAuthenticatorPush', label: 'Microsoft Authenticator push notification' },
   { value: 'microsoftAuthenticatorCode', label: 'Microsoft Authenticator code' },
   { value: 'passkeyOrFido2SecurityKey', label: 'Passkey / FIDO2 security key' },
@@ -291,8 +293,8 @@ export function evaluateScenario(scenario: Scenario): Evaluation {
 
       if (!isAnyMfa(scenario.signInMfaMethod)) {
         blockers.push('Authenticator campaigns only evaluate after an MFA sign-in.')
-      } else if (!isSmsOrVoice(scenario.signInMfaMethod)) {
-        blockers.push('Authenticator campaigns prompt only after SMS or voice call MFA.')
+      } else if (scenario.campaignState === 'managed' && !isSmsOrVoice(scenario.signInMfaMethod)) {
+        blockers.push('Microsoft managed Authenticator campaigns prompt only after SMS or voice call MFA.')
       }
     }
 
