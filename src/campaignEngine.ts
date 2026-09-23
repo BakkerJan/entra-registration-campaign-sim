@@ -268,6 +268,10 @@ export function evaluateScenario(scenario: Scenario): Evaluation {
   if (scenario.campaignState === 'disabled') {
     blockers.push('The registration campaign is disabled.')
   } else {
+    if (scenario.signInMfaMethod === 'temporaryAccessPass') {
+      blockers.push('Temporary Access Pass sign-ins do not qualify for the nudge.')
+    }
+
     if (scenario.registerSecurityInfoBlocked) {
       blockers.push('Conditional Access blocks the Register security information page.')
     }
