@@ -40,6 +40,7 @@ function App() {
   const [scenario, setScenario] = useState<Scenario>(defaultScenario)
 
   const evaluation = useMemo(() => evaluateScenario(scenario), [scenario])
+  const passkeyEligibilityActive = scenario.campaignState === 'managed' && scenario.targetMethod === 'passkey'
 
   function updateScenario<K extends keyof Scenario>(key: K, value: Scenario[K]) {
     setScenario((current) => {
@@ -252,6 +253,7 @@ function App() {
                 <span>Passkey profile</span>
                 <select
                   value={scenario.passkeyProfile}
+                  disabled={scenario.campaignState !== 'managed' || scenario.targetMethod !== 'passkey'}
                   onChange={(event) =>
                     updateScenario('passkeyProfile', event.target.value as PasskeyProfile)
                   }
@@ -264,7 +266,14 @@ function App() {
                 </select>
               </label>
 
-              {scenario.passkeyProfile === 'aaguidRestricted' ? (
+              {scenario.campaignState !== 'managed' || scenario.targetMethod !== 'passkey' ? (
+                <div className="info-box">
+                  <strong>Passkey profile eligibility is not used in this state</strong>
+                  <p>
+                    The Microsoft managed passkey-profile eligibility check applies only when the campaign is in the Microsoft managed state and targets passkeys.
+                  </p>
+                </div>
+              ) : scenario.passkeyProfile === 'aaguidRestricted' ? (
                 <div>
                   <span className="section-label">AAGUID allow list supported providers</span>
                   <div className="chip-grid">
