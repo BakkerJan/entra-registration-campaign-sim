@@ -133,12 +133,26 @@
   margin-top: 0;
 }
 
-.disabled-state-grid {
-  grid-template-columns: 1fr;
+.standalone-disabled-state {
+  grid-column: 1 / -1;
 }
 
-.compact-state-box {
-  margin-top: 0;
+.state-banner {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.state-banner strong {
+  font-size: 1rem;
+}
+
+.state-banner p {
+  margin: 0;
+  color: #dbe4f0;
 }
 
 .panel-title-row {

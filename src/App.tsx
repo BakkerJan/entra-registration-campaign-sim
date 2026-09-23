@@ -148,8 +148,8 @@ function App() {
           </div>
 
           {campaignDisabled ? (
-            <div className="form-grid disabled-state-grid">
-              <div className="info-box compact-state-box">
+            <div className="standalone-disabled-state">
+              <div className="state-banner">
                 <strong>Campaign disabled</strong>
                 <p>The registration campaign is turned off, so users are not nudged.</p>
               </div>
