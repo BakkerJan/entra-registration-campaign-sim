@@ -124,12 +124,20 @@
 .panel-controls > :nth-child(1),
 .panel-controls > :nth-child(2),
 .panel-controls > :nth-child(5),
-.panel-controls > .disabled-state-card {
+.panel-controls > .disabled-state-grid {
   grid-column: 1 / -1;
 }
 
 .panel-controls > :nth-child(3),
 .panel-controls > :nth-child(4) {
+  margin-top: 0;
+}
+
+.disabled-state-grid {
+  grid-template-columns: 1fr;
+}
+
+.compact-state-box {
   margin-top: 0;
 }
 

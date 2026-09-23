@@ -148,11 +148,9 @@ function App() {
           </div>
 
           {campaignDisabled ? (
-            <div className="checklist-card disabled-state-card">
-              <div className="card-heading">
-                <h3>Campaign disabled</h3>
-              </div>
-              <div className="info-box">
+            <div className="form-grid disabled-state-grid">
+              <div className="info-box compact-state-box">
+                <strong>Campaign disabled</strong>
                 <p>The registration campaign is turned off, so users are not nudged.</p>
               </div>
             </div>
