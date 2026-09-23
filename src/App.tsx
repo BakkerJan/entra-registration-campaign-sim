@@ -39,6 +39,7 @@ const defaultScenario: Scenario = {
 function App() {
   const [scenario, setScenario] = useState<Scenario>(defaultScenario)
 
+  const campaignDisabled = scenario.campaignState === 'disabled'
   const evaluation = useMemo(() => evaluateScenario(scenario), [scenario])
 
   function updateScenario<K extends keyof Scenario>(key: K, value: Scenario[K]) {
@@ -144,229 +145,242 @@ function App() {
                 <span className="field-note">Microsoft managed forces Passkey and locks the method selector.</span>
               ) : null}
             </label>
-
-            <label>
-              <span>Target method</span>
-              <select
-                value={scenario.targetMethod}
-                disabled={scenario.campaignState === 'managed'}
-                onChange={(event) => updateScenario('targetMethod', event.target.value as TargetMethod)}
-              >
-                {methodOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              <span>OS</span>
-              <select value={scenario.os} onChange={(event) => updateScenario('os', event.target.value as Os)}>
-                {osOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              <span>Browser family</span>
-              <select
-                value={scenario.browserFamily}
-                onChange={(event) =>
-                  updateScenario('browserFamily', event.target.value as Scenario['browserFamily'])
-                }
-              >
-                {browserFamilyOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              <span>Sign-in MFA method</span>
-              <select
-                value={scenario.signInMfaMethod}
-                onChange={(event) =>
-                  updateScenario('signInMfaMethod', event.target.value as Scenario['signInMfaMethod'])
-                }
-              >
-                {signInMfaOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
           </div>
 
-          <div className="checklist-card">
-            <div className="card-heading">
-              <h3>Local passkeys available on this platform</h3>
+          {campaignDisabled ? (
+            <div className="info-box">
+              <strong>Campaign disabled</strong>
               <p>
-                Select every local passkey type that exists on the current OS and browser family.
-                When your sign-in MFA method is passkey/FIDO2, Windows Hello for Business, or Platform SSO,
-                matching local passkeys are auto-selected.
+                The registration campaign is turned off, so every other policy and environmental setting is ignored.
               </p>
             </div>
-
-            <div className="chip-grid">
-              {localPasskeyOptions.map((option) => {
-                const selected = scenario.selectedLocalPasskeys.includes(option.value)
-
-                return (
-                  <button
-                    key={option.value}
-                    type="button"
-                    className={selected ? 'chip chip-selected' : 'chip'}
-                    onClick={() => toggleLocalPasskey(option.value)}
+          ) : (
+            <>
+              <div className="form-grid">
+                <label>
+                  <span>Target method</span>
+                  <select
+                    value={scenario.targetMethod}
+                    disabled={scenario.campaignState === 'managed'}
+                    onChange={(event) => updateScenario('targetMethod', event.target.value as TargetMethod)}
                   >
-                    {option.label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+                    {methodOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-          <div className="checklist-card">
-            <div className="card-heading">
-              <h3>Policy switches</h3>
-              <p>These are the consequence gates the article calls out.</p>
-            </div>
+                <label>
+                  <span>OS</span>
+                  <select value={scenario.os} onChange={(event) => updateScenario('os', event.target.value as Os)}>
+                    {osOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-            <div className="toggle-list">
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={scenario.passkeySelfServiceSetup}
-                  onChange={(event) => updateScenario('passkeySelfServiceSetup', event.target.checked)}
-                />
-                <span>Passkey self-service setup is allowed</span>
-              </label>
+                <label>
+                  <span>Browser family</span>
+                  <select
+                    value={scenario.browserFamily}
+                    onChange={(event) =>
+                      updateScenario('browserFamily', event.target.value as Scenario['browserFamily'])
+                    }
+                  >
+                    {browserFamilyOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-              <label className="toggle-row">
-                <span>Passkey profile</span>
-                <select
-                  value={scenario.passkeyProfile}
-                  disabled={scenario.campaignState !== 'managed' || scenario.targetMethod !== 'passkey'}
-                  onChange={(event) =>
-                    updateScenario('passkeyProfile', event.target.value as PasskeyProfile)
-                  }
-                >
-                  {passkeyProfileOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <label>
+                  <span>Sign-in MFA method</span>
+                  <select
+                    value={scenario.signInMfaMethod}
+                    onChange={(event) =>
+                      updateScenario('signInMfaMethod', event.target.value as Scenario['signInMfaMethod'])
+                    }
+                  >
+                    {signInMfaOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-              {scenario.campaignState !== 'managed' || scenario.targetMethod !== 'passkey' ? (
-                <div className="info-box">
-                  <strong>Passkey profile eligibility is not used in this state</strong>
+              <div className="checklist-card">
+                <div className="card-heading">
+                  <h3>Local passkeys available on this platform</h3>
                   <p>
-                    The Microsoft managed passkey-profile eligibility check applies only when the campaign is in the Microsoft managed state and targets passkeys.
+                    Select every local passkey type that exists on the current OS and browser family.
+                    When your sign-in MFA method is passkey/FIDO2, Windows Hello for Business, or Platform SSO,
+                    matching local passkeys are auto-selected.
                   </p>
                 </div>
-              ) : scenario.passkeyProfile === 'aaguidRestricted' ? (
-                <div>
-                  <span className="section-label">AAGUID allow list supported providers</span>
-                  <div className="chip-grid">
-                    {supportedProviderOptions.map((provider) => {
-                      const selected = scenario.aaguidProviders.includes(provider.value)
 
-                      return (
-                        <button
-                          key={provider.value}
-                          type="button"
-                          className={selected ? 'chip chip-selected' : 'chip'}
-                          onClick={() => toggleProvider(provider.value)}
-                        >
-                          {provider.label}
-                        </button>
-                      )
-                    })}
-                  </div>
+                <div className="chip-grid">
+                  {localPasskeyOptions.map((option) => {
+                    const selected = scenario.selectedLocalPasskeys.includes(option.value)
 
-                  <div className="info-box">
-                    <strong>Only relevant for AAGUID-restricted profiles</strong>
-                    <p>
-                      The allow list is checked only when the passkey profile is AAGUID-restricted. Other profiles ignore it.
-                    </p>
-                  </div>
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        className={selected ? 'chip chip-selected' : 'chip'}
+                        onClick={() => toggleLocalPasskey(option.value)}
+                      >
+                        {option.label}
+                      </button>
+                    )
+                  })}
                 </div>
-              ) : (
-                <div className="info-box">
-                  <strong>AAGUID allow list is not used here</strong>
-                  <p>
-                    Only the AAGUID-restricted passkey profile evaluates the supported provider list.
-                  </p>
+              </div>
+
+              <div className="checklist-card">
+                <div className="card-heading">
+                  <h3>Policy switches</h3>
+                  <p>These are the consequence gates the article calls out.</p>
                 </div>
-              )}
-            </div>
-          </div>
 
-          <div className="checklist-card">
-            <div className="card-heading">
-              <h3>Environment blockers</h3>
-              <p>These model the article’s sign-in suppressors.</p>
-            </div>
+                <div className="toggle-list">
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={scenario.passkeySelfServiceSetup}
+                      onChange={(event) => updateScenario('passkeySelfServiceSetup', event.target.checked)}
+                    />
+                    <span>Passkey self-service setup is allowed</span>
+                  </label>
 
-            <div className="toggle-list">
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={scenario.ssoSessionActive}
-                  onChange={(event) => updateScenario('ssoSessionActive', event.target.checked)}
-                />
-                <span>Already signed in with SSO</span>
-              </label>
+                  <label className="toggle-row">
+                    <span>Passkey profile</span>
+                    <select
+                      value={scenario.passkeyProfile}
+                      disabled={scenario.campaignState !== 'managed' || scenario.targetMethod !== 'passkey'}
+                      onChange={(event) =>
+                        updateScenario('passkeyProfile', event.target.value as PasskeyProfile)
+                      }
+                    >
+                      {passkeyProfileOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
 
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={scenario.registerSecurityInfoBlocked}
-                  onChange={(event) =>
-                    updateScenario('registerSecurityInfoBlocked', event.target.checked)
-                  }
-                />
-                <span>Conditional Access blocks Register security information</span>
-              </label>
+                  {scenario.campaignState !== 'managed' || scenario.targetMethod !== 'passkey' ? (
+                    <div className="info-box">
+                      <strong>Passkey profile eligibility is not used in this state</strong>
+                      <p>
+                        The Microsoft managed passkey-profile eligibility check applies only when the campaign is in the Microsoft managed state and targets passkeys.
+                      </p>
+                    </div>
+                  ) : scenario.passkeyProfile === 'aaguidRestricted' ? (
+                    <div>
+                      <span className="section-label">AAGUID allow list supported providers</span>
+                      <div className="chip-grid">
+                        {supportedProviderOptions.map((provider) => {
+                          const selected = scenario.aaguidProviders.includes(provider.value)
 
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={scenario.termsOfUseVisible}
-                  onChange={(event) => updateScenario('termsOfUseVisible', event.target.checked)}
-                />
-                <span>Terms of use appears during sign-in</span>
-              </label>
+                          return (
+                            <button
+                              key={provider.value}
+                              type="button"
+                              className={selected ? 'chip chip-selected' : 'chip'}
+                              onClick={() => toggleProvider(provider.value)}
+                            >
+                              {provider.label}
+                            </button>
+                          )
+                        })}
+                      </div>
 
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={scenario.customControlsVisible}
-                  onChange={(event) => updateScenario('customControlsVisible', event.target.checked)}
-                />
-                <span>Conditional Access custom controls redirect the sign-in</span>
-              </label>
+                      <div className="info-box">
+                        <strong>Only relevant for AAGUID-restricted profiles</strong>
+                        <p>
+                          The allow list is checked only when the passkey profile is AAGUID-restricted. Other profiles ignore it.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="info-box">
+                      <strong>AAGUID allow list is not used here</strong>
+                      <p>
+                        Only the AAGUID-restricted passkey profile evaluates the supported provider list.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={scenario.sameSessionAsMethodRegistration}
-                  onChange={(event) =>
-                    updateScenario('sameSessionAsMethodRegistration', event.target.checked)
-                  }
-                />
-                <span>This is the same session where another authentication method was just registered</span>
-              </label>
-            </div>
-          </div>
+              <div className="checklist-card">
+                <div className="card-heading">
+                  <h3>Environment blockers</h3>
+                  <p>These model the article’s sign-in suppressors.</p>
+                </div>
+
+                <div className="toggle-list">
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={scenario.ssoSessionActive}
+                      onChange={(event) => updateScenario('ssoSessionActive', event.target.checked)}
+                    />
+                    <span>Already signed in with SSO</span>
+                  </label>
+
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={scenario.registerSecurityInfoBlocked}
+                      onChange={(event) =>
+                        updateScenario('registerSecurityInfoBlocked', event.target.checked)
+                      }
+                    />
+                    <span>Conditional Access blocks Register security information</span>
+                  </label>
+
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={scenario.termsOfUseVisible}
+                      onChange={(event) => updateScenario('termsOfUseVisible', event.target.checked)}
+                    />
+                    <span>Terms of use appears during sign-in</span>
+                  </label>
+
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={scenario.customControlsVisible}
+                      onChange={(event) => updateScenario('customControlsVisible', event.target.checked)}
+                    />
+                    <span>Conditional Access custom controls redirect the sign-in</span>
+                  </label>
+
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={scenario.sameSessionAsMethodRegistration}
+                      onChange={(event) =>
+                        updateScenario('sameSessionAsMethodRegistration', event.target.checked)
+                      }
+                    />
+                    <span>This is the same session where another authentication method was just registered</span>
+                  </label>
+                </div>
+              </div>
+            </>
+          )}
         </section>
 
         <section className="panel panel-output">
